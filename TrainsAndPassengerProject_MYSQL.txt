@@ -1,0 +1,109 @@
+Table:Trains
++-------+----------------------+--------------------+--------------------+
+| tno   | tname                | start              | end                |
++-------+----------------------+--------------------+--------------------+
+| 11096 | Ahimsa express       | pune junction      | ahmedabad junction |
+| 12015 | ajmer shatabdi       | new delhi          | ajmer junction     |
+|  1651 | pune hbj special     | pune junction      | habibganj          |
+| 13005 | amritsar mail        | horah junction     | amritsar junction  |
+| 12002 | bhopal shatabdi      | new delhi          | habibganj          |
+| 12417 | prayag raj express   | allahabad junction | new delhi          |
+| 14673 | shaheed express      | jaynagar           | amritsar junction  |
+| 12314 | sealdah rajdhani     | new delhi          | sealdah            |
+| 12498 | shane punjab         | amritsar junction  | new delhi          |
+| 12451 | shram shakti express | kanpur central     | new delhi          |
+| 12030 | swarna shatabdi      | amritsar junction  | new delhi          |
++-------+----------------------+--------------------+--------------------+
+  Table:Passengers
++------+-------+-------------+--------+------+------------+
+| pnr  | tno   | pname       | gender | age  | traveldate |
++------+-------+-------------+--------+------+------------+
+| P001 | 13005 | r n agarwal | male   |   45 | 2018-12-25 |
+| p002 | 12015 | p tiwary    | male   |   28 | 2018-11-10 |
+| p003 | 12015 | s tiwary    | female |   22 | 2018-11-10 |
+| p004 | 12030 | s k saxena  | male   |   42 | 2018-10-12 |
+| p005 | 12030 | s saxena    | female |   35 | 2018-10-12 |
+| p006 | 12030 | p saxena    | female |   12 | 2018-10-12 |
+| p007 | 13005 | n s singh   | male   |   52 | 2018-05-09 |
+| p008 | 12030 | j k sharma  | male   |   65 | 2018-05-09 |
+| p009 | 12030 | r sharma    | female |   58 | 2018-05-09 |
++------+-------+-------------+--------+------+------------+
+  MySQL Queries:
+
+  1.To Display details of all trains which starts from NEW delhi
+  Ans:mysql> select * from trains where start = 'new delhi';
++-------+------------------+-----------+----------------+
+| tno   | tname            | start     | end            |
++-------+------------------+-----------+----------------+
+| 12015 | ajmer shatabdi   | new delhi | ajmer junction |
+| 12002 | bhopal shatabdi  | new delhi | habibganj      |
+| 12314 | sealdah rajdhani | new delhi | sealdah        |
++-------+------------------+-----------+----------------+  
+2.To Display pnr,pname,gender and age of all passengers whose age is below 50
+Ans:mysql> select pnr,pname,gender,age from passengers
+    -> where age < 50;
++------+-------------+--------+------+
+| pnr  | pname       | gender | age  |
++------+-------------+--------+------+
+| P001 | r n agarwal | male   |   45 |
+| p002 | p tiwary    | male   |   28 |
+| p003 | s tiwary    | female |   22 |
+| p004 | s k saxena  | male   |   42 |
+| p005 | s saxena    | female |   35 |
+| p006 | p saxena    | female |   12 |
++------+-------------+--------+------+
+3.To Display total no.of male and female passangers
+Ans:mysql> select gender,count(*) from passengers
+    -> group by gender;
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| female |        4 |
+| male   |        5 |
++--------+----------+
+4.To Display records of all passengers travelling in trains whose tno is 12015
+Ans:mysql> select * from passengers
+    -> where tno = 12015;
++------+-------+----------+--------+------+------------+
+| pnr  | tno   | pname    | gender | age  | traveldate |
++------+-------+----------+--------+------+------------+
+| p002 | 12015 | p tiwary | male   |   28 | 2018-11-10 |
+| p003 | 12015 | s tiwary | female |   22 | 2018-11-10 |
++------+-------+----------+--------+------+------------+
+5.mysql> select max(traveldate),min(traveldate) from passengers where gender = 'female';
++-----------------+-----------------+
+| max(traveldate) | min(traveldate) |
++-----------------+-----------------+
+| 2018-11-10      | 2018-05-09      |
++-----------------+-----------------+
+6.mysql> select end,count(*) from trains
+    -> group by end
+    -> having count(*) > 1;
++-------------------+----------+
+| end               | count(*) |
++-------------------+----------+
+| amritsar junction |        2 |
+| habibganj         |        2 |
+| new delhi         |        4 |
++-------------------+----------+
+7.mysql> select distinct traveldate from passengers;
++------------+
+| traveldate |
++------------+
+| 2018-12-25 |
+| 2018-11-10 |
+| 2018-10-12 |
+| 2018-05-09 |
++------------+
+8.mysql> select tname,pname from trains t, passengers p
+    -> where t.tno = p.tno
+    -> and age between 50 and 60;
++-----------------+-----------+
+| tname           | pname     |
++-----------------+-----------+
+| amritsar mail   | n s singh |
+| swarna shatabdi | r sharma  |
++-----------------+-----------+
+    
+    
+    
